@@ -8,7 +8,18 @@ Zentrales Objekt: RealBug
 
 POST
 /RealBug
-Argumente: position=ln,lt description=text;bild=blob;
+The POST content will be a JSON-Object:
+{'position':string,'description'=string,'image'=blob}
+
+notes: position is formated as ln,lt 
+
+POST will look like this: 
+POST /RealBug HTTP/1.1
+Content-Type: application/json
+Content-Length: <length>
+Host: <Hostname>
+
+{'position':string,'description'=string,'image'=blob}
 
 2. Liste aller Realbugs als JSON-Array zurückgeben
 
