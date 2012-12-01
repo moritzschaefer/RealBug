@@ -11,6 +11,8 @@ POST
 The POST content will be a JSON-Object:
 {'position':string,'description'=string,'image'=blob}
 
+RETURN: If succesful. Give a 200-Header. If the request is bad give a 400-Header. body is always empty
+
 notes: position is formated as ln,lt 
 
 POST will look like this: 
