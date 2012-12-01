@@ -29,3 +29,12 @@ GET
 GET
 URL/RealBug/ID/IMG
 
+(5. Gib einen Realbug zurück)
+GET 
+/RealBug/ID
+JSON-Format: {id:int, description:string, image:string, ltln:string}
+
+note: image:string is an url to the image RESTfull-call (see 4.)
+note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
+
+
