@@ -43,7 +43,7 @@ public class RealBugNetwork {
      * @param image         The image the user took to document the RealBug as JPG
      * @return              Returns a json-object as String 
      */
-    private String jsonStringCreate(double longitude, double latitude, String description, ByteBuffer image) {
+    private String jsonStringCreate(double longitude, double latitude, String description) {
         JSONObject object = new JSONObject();
         try {
             object.put(REAL_BUG_JSON_KEY_POSITION, String.format("%f,%f", longitude, latitude));
@@ -64,20 +64,20 @@ public class RealBugNetwork {
      * @param image         The image the user took to document the RealBug as JPG
      *
      */
-    public void realBugPost(double longitude, double latitude, String description, ByteBuffer image) {
-
-        String jsonPostObject = jsonStringCreate(longitude, latitude, description, image);
+    public void realBugPost(double longitude, double latitude, String description, byte[] image) {
+        String jsonPostObject = jsonStringCreate(longitude, latitude, description);
         DefaultHttpClient httpclient = new DefaultHttpClient(); 
         HttpPost httppost = new HttpPost(URL+"/RealBug");
         StringEntity se = new StringEntity(jsonPostObject);
         httppost.setEntity(se);
 
-        //httppost.setHeader("Accept", "application/json"); //not necessary!
-        httppost.setHeader("Content-type", "application/json");
+        httppost.setHeader("Accept", "application/json"); 
+        httppost.setHeader("Content-Type", "application/json");
 
         ResponseHandler responseHandler = new BasicResponseHandler();
+        HttpResponse response;
         try {
-            httpclient.execute(httppost, responseHandler);
+            response = httpclient.execute(httppost, responseHandler);
         }
         catch (HttpResponseException e) {
             //Filter e for 400 (client error) 500 (user error) 300 (forward... change to code to automatically follow :))
@@ -85,6 +85,12 @@ public class RealBugNetwork {
             return;
             //Do some user feedback to singalize the fail
         }
+        //TODO: Get ID from response
+        int id;
+        HttpEntity entity = response.getEntity();
+        InputStream is = entity.getContent();
+        JSONObject obj = new JSONObject(convertStreamToString(is));
+        updateRealBugImg(obj.getInt(REAL_BUG_JSON_KEY_ID), image);
     }
 
     /**
@@ -102,12 +108,12 @@ public class RealBugNetwork {
         HttpGet httpget = new HttpGet(URL+String.format("/RealBug/%f,%f,%f",longitude, latitude, radius));
 
         httpget.setHeader("Accept", "application/json");
-        //httpget.setHeader("Content-type", "application/json");
+        //httpget.setHeader("Content-Type", "application/json");
         HttpResponse response;
 
         ResponseHandler responseHandler = new BasicResponseHandler();
         try {
-            response = httpclient.execute(httppost, responseHandler);
+            response = httpclient.execute(httpget, responseHandler);
         }
         catch (HttpResponseException e) {
             //Filter e for 400 (client error) 500 (user error) 300 (forward... change to code to automatically follow :))
@@ -119,19 +125,13 @@ public class RealBugNetwork {
         if(entity == null) 
             return new ArrayList<RealBugData>(); //Return empty list
         InputStream instream = entity.getContent();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
-        StringBuilder sb = new StringBuilder;
         
-        String line = null;
-        while((line = reader.readLine()) != null)
-            sb.append(line+"\n");
-        String result = sb.toString();
 
-        instream.close();
+        JSONArray jsonResults = new JSONArray(convertStreamToString(instream));
+
         httpget.abort();
 
         
-        JSONArray jsonResults = new JSONArray(result);
 
         List<RealBugData> returnArray = new ArrayList<RealBugData>(jsonResults.length);
         for(int i=0; i<jsonResults.length(); i++) {
@@ -145,4 +145,103 @@ public class RealBugNetwork {
         return returnArray;
     }
 
+    public RealBugData realBugById(int id) {
+        DefaultHttpClient httpclient = new DefaultHttpClient(); 
+        HttpGet httpget = new HttpGet(URL+String.format("/RealBug/%d", id);
+
+        httpget.setHeader("Accept", "application/json");
+        //httpget.setHeader("Content-Type", "application/json");
+        HttpResponse response;
+
+        ResponseHandler responseHandler = new BasicResponseHandler();
+        try {
+            response = httpclient.execute(httpget, responseHandler);
+        }
+        catch (HttpResponseException e) {
+            //Filter e for 400 (client error) 500 (user error) 300 (forward... change to code to automatically follow :))
+            e.printStackTrace();
+            return;
+            //Do some user feedback to singalize the fail
+        }
+        HttpEntity entity = response.getEntity();
+        if(entity == null) 
+            return new ArrayList<RealBugData>(); //Return empty list
+        InputStream instream = entity.getContent();
+
+        JSONObject jsonObj = new JSONObject(convertStreamToString(instream));
+
+        httpget.abort();
+
+        return new RealBugData(jsonObj.getString(REAL_BUG_JSON_KEY_POSITION),
+                               jsonObj.getString(REAL_BUG_JSON_KEY_DESCRIPTION),
+                               String.format("/RealBug/%d/img",jsonObj.getInt(REAL_BUG_JSON_KEY_ID)));
+    }
+
+    public void updateRealBugImg(int id, byte[] image) {
+        DefaultHttpClient httpclient = new DefaultHttpClient(); 
+        HttpPut httpput = new HttpPut(URL+String.format("/RealBug/%d/img",id));
+
+        httpput.setHeader("Content-Type", "image/jpeg");
+        httpput.setEntity(new HttpEntity(image));
+        
+
+        ResponseHandler responseHandler = new BasicResponseHandler();
+        HttpResponse response;
+        try {
+            httpclient.execute(httpput, responseHandler);
+        }
+        catch (HttpResponseException e) {
+            //Filter e for 400 (client error) 500 (user error) 300 (forward... change to code to automatically follow :))
+            e.printStackTrace();
+            return;
+            //Do some user feedback to singalize the fail
+        }
+    }
+
+    public byte[] realBugImage(int id) {
+        DefaultHttpClient httpclient = new DefaultHttpClient(); 
+        HttpGet httpget = new HttpGet(URL+String.format("/RealBug/%d/img", id);
+
+        httpget.setHeader("Accept", "image/jpeg");
+        HttpResponse response;
+
+        ResponseHandler responseHandler = new BasicResponseHandler();
+        try {
+            response = httpclient.execute(httpget, responseHandler);
+        }
+        catch (HttpResponseException e) {
+            //Filter e for 400 (client error) 500 (user error) 300 (forward... change to code to automatically follow :))
+            e.printStackTrace();
+            return;
+            //Do some user feedback to singalize the fail
+        }
+
+        byte[] imageBuffer = EntityUtils.toByteArray(response.getEntity());
+        return imageBuffer;
+
+    }
+
+    private static String convertStreamToString(InputStream is) {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append((line + "\n"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
 }
+

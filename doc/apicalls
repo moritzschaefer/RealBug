@@ -9,48 +9,65 @@ Zentrales Objekt: RealBug
 POST
 /RealBug
 The POST content will be a JSON-Object:
-{'position':string,'description'=string,'image'=blob}
+{'position':string,'description'=string}
 
-RETURN: If succesful. Give a 200-Header. If the request is bad give a 400-Header. body is always empty
+RETURN: If succesful. Give a 2**-Header with the id of the new RealBug. If the request is bad give a 400-Header with empty body
 
 notes: position is formated as ln,lt 
 
 POST will look like this: 
 POST /RealBug HTTP/1.1
 Content-Type: application/json
+Accept: application/json
 Content-Length: <length>
 Host: <Hostname>
 
-{'position':string,'description'=string,'image'=blob}
+{'position':string,'description'=string}
 
-2. Liste aller Realbugs als JSON-Array zurückgeben
+Response like this:
+
+{'id':int}
+
+2. Liste aller RealBugs als JSON-Array zurückgeben
 
 GET 
 /RealBug
-JSON-Format: [{id:int, description:string, image:string, ltln:string}, ..., ... ] 
+JSON-Format: [{id:int, description:string, image:string, lnlt:string}, ..., ... ] 
 
 note: image:string is an url to the image RESTfull-call (see 4.)
-note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
+note2: lnlt is formated as lt,ln examples: "1.123123,5.2123123"
 
-(3. Liste aller Realbugs in Radius r um Position ll,lt
+3. Liste aller Realbugs in Radius r um Position ll,lt
 GET
 /RealBug/ll,lt,r  Beispiel: http://url.do/RealBug/0.1231244,23.1229394,500.0
 NOTE: all Values are doubles/floats!!
 Returns list as in 2.
-)
 
 
 4. Gib Bild von gegebener Url zurück
 
 GET
 URL/RealBug/ID/img
+Format: image/jpeg
 
 (5. Gib einen Realbug zurück)
 GET 
 /RealBug/ID
-JSON-Format: {id:int, description:string, image:string, ltln:string}
+JSON-Format: {id:int, description:string, image:string, lnlt:string}
 
 note: image:string is an url to the image RESTfull-call (see 4.)
-note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
+note2: lnlt is formated as ln,lt examples: "1.123123,5.2123123"
 
+6. Update Image
+PUT
+/RealBug/ID/img
+Mime-Format: image/jpeg
+Returns normal http headers (2** 3** 4** 5**) and NO body
 
+(LATER:
+7. Update RealBug (position, description)
+PUT
+/RealBug/ID
+Format: JSON
+JSON-Format: {'position':string,'description':string} //ONLY ONE is necessary. E.g. only update the description
+DISCUSS: Posible to change position? sense??? or only update description 
