@@ -11,4 +11,5 @@
             
     
     mysql_select_db($db);
+    echo "asdf";
 ?>
