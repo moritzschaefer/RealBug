@@ -1,0 +1,51 @@
+API-Referenz
+RESTfull API:
+
+Zentrales Objekt: RealBug 
+
+
+1. Neuen RealBug kreiieren
+
+POST
+/RealBug
+The POST content will be a JSON-Object:
+{'position':string,'description'=string,'image'=blob}
+
+notes: position is formated as ln,lt 
+
+POST will look like this: 
+POST /RealBug HTTP/1.1
+Content-Type: application/json
+Content-Length: <length>
+Host: <Hostname>
+
+{'position':string,'description'=string,'image'=blob}
+
+2. Liste aller Realbugs als JSON-Array zurückgeben
+
+GET 
+/RealBug
+JSON-Format: [{id:int, description:string, image:string, ltln:string}, ..., ... ] 
+
+note: image:string is an url to the image RESTfull-call (see 4.)
+note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
+
+(3. Liste aller Realbugs in Radius r um Position ll,lt
+GET
+/RealBug/ll,lt,r  Beispiel: http://url.do/RealBug/0.1231244,23.1229394,500
+)
+
+4. Gib Bild von gegebener Url zurück
+
+GET
+URL/RealBug/ID/IMG
+
+(5. Gib einen Realbug zurück)
+GET 
+/RealBug/ID
+JSON-Format: {id:int, description:string, image:string, ltln:string}
+
+note: image:string is an url to the image RESTfull-call (see 4.)
+note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
+
+
