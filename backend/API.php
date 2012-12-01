@@ -58,6 +58,39 @@ class RealBugAPI{
 		}
 	}
 	
+	public function getRealBugs(){
+		header('Content-type: application/json');
+		
+		try{
+			$select = pg_escape_string("Select * from bug");
+			$result = pg_query($this->con, $select);
+			
+			$returns = array();
+			while($bugData = pg_fetch_assoc($result)){
+				$imageUrl = $_SERVER["REQUEST_URI"] . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "IMG";
+				$pos = $bugData['ln'] . "," . $bugData['lt'];
+				
+				$returns[] = array(
+					'id' => $bugData['id'],
+					'description' => $bugData['description'],
+					'image' => $imageUrl,
+					'lnlt' => $pos
+				);
+			}
+			
+			echo json_encode($returns);
+		}catch(Exception $e){
+			echo json_encode(array('error' => $e->getMessage()));
+		}
+	}
+	
+	public function addBug(){
+		$pos = explode(',', $_POST['position']);
+		$description = $_POST['description'];
+		
+		
+	}
+	
 }
 
 ?>

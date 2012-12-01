@@ -10,6 +10,12 @@ $app->get('/RealBug/:id', function($id){
 		$api = new RealBugAPI();
 		$api->getRealBug($id);
 	});
+	
+$app->get('/RealBug', function(){
+		$api = new RealBugAPI();
+		$api->getRealBugs();
+	});
+		
 $app->run();
 
 ?>
