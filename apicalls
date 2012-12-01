@@ -8,12 +8,16 @@ Zentrales Objekt: RealBug
 
 POST
 /RealBug
-Argumente: position=ll,lt description=text;bild=blob;
+Argumente: position=ln,lt description=text;bild=blob;
 
 2. Liste aller Realbugs als JSON-Array zurückgeben
 
 GET 
 /RealBug
+JSON-Format: [{id:int, description:string, image:string, ltln:string}, ..., ... ] 
+
+note: image:string is an url to the image RESTfull-call (see 4.)
+note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
 
 (3. Liste aller Realbugs in Radius r um Position ll,lt
 GET
