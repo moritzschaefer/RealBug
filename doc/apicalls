@@ -38,7 +38,7 @@ GET
 4. Gib Bild von gegebener Url zurück
 
 GET
-URL/RealBug/ID/IMG
+/RealBug/ID/IMG
 
 (5. Gib einen Realbug zurück)
 GET 
