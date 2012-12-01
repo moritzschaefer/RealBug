@@ -3,6 +3,11 @@
 
     <string name="app_name">RealBug</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-
+    <string name="menu_camera">Camera</string>
+	<string name="album_name">RealBugCapture</string>
+	<string name="bug_description">Bug description</string>
+	<string name="btn_send">Send</string>
+	<string name="btn_cancel">Cancel</string>
+	<string name="capture_description">Here is the Thumb for the BugCapture</string>
+	
 </resources>
