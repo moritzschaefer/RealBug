@@ -43,7 +43,7 @@ Returns list as in 2.
 4. Gib Bild von gegebener Url zurück
 
 GET
-URL/RealBug/ID/img
+/RealBug/ID/IMG
 
 (5. Gib einen Realbug zurück)
 GET 
