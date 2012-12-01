@@ -11,6 +11,8 @@ POST
 The POST content will be a JSON-Object:
 {'position':string,'description'=string,'image'=blob}
 
+RETURN: If succesful. Give a 200-Header. If the request is bad give a 400-Header. body is always empty
+
 notes: position is formated as ln,lt 
 
 POST will look like this: 
@@ -32,8 +34,11 @@ note2: ltln is formated as lt,ln examples: "1.123123,5.2123123"
 
 (3. Liste aller Realbugs in Radius r um Position ll,lt
 GET
-/RealBug/ll,lt,r  Beispiel: http://url.do/RealBug/0.1231244,23.1229394,500
+/RealBug/ll,lt,r  Beispiel: http://url.do/RealBug/0.1231244,23.1229394,500.0
+NOTE: all Values are doubles/floats!!
+Returns list as in 2.
 )
+
 
 4. Gib Bild von gegebener Url zurück
 
