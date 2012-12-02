@@ -79,7 +79,7 @@ class RealBugAPI{
 		$pos = explode(',', $data['position']);
 		$description = $data['description'];
 		
-		$insert = pg_escape_string(sprintf("INSERT INTO bug (description, lt, ln) VALUES ('%s', %s, %s)", $description, $pos[1], $pos[0]));
+		$insert = sprintf("INSERT INTO bug (description, lt, ln) VALUES ('%s', %s, %s)", pg_escape_string($description), $pos[1], $pos[0]);
 		$this->fileLog("addBug:".$insert);
 		
 		$result = pg_query($insert);
@@ -93,7 +93,7 @@ class RealBugAPI{
 		$data =  file_get_contents("php://input");
 		$this->fileLog("updateBugImage:".$data);
 		
-		$update = pg_escape_bytea(sprintf("update bug set image=%s", $data));
+		$update = sprintf("update bug set image=%s", pg_escape_bytea($data));
 		$result = pg_query($update);
 		
 		if($result === false){
