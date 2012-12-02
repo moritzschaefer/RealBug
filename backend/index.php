@@ -20,7 +20,12 @@ $app->post('/RealBug', function(){
 		$api = new RealBugAPI();
 		$api->addBug();
 	});
-
+	
+	
+$app->put('/RealBug/:id/img', function($id){
+		$api = new RealBugAPI();
+		$api->updateBugImage($id);
+	});
 		
 $app->run();
 

@@ -35,6 +35,7 @@ class RealBugAPI{
 	}
 	
 	public function getRealBug($id){
+		$this->fileLog("retrieve id ".$id);
 		header('Content-type: application/json');
 		
 		try{
@@ -71,15 +72,44 @@ class RealBugAPI{
 	}
 	
 	public function addBug(){
-		$pos = explode(',', $_POST['position']);
-		$description = $_POST['description'];
+		$this->fileLog("addBug:".file_get_contents("php://input"));
+		$data = json_decode(file_get_contents("php://input"), true);
+		$this->fileLog("addBug:".var_export($data, true));
 		
-		$insert = pg_escape_string(sprintf("INSERT INTO bug(description, lt, ln) VALUES (%s, %d, %d)", $description, $pos[1], $pos[0]));
+		$pos = explode(',', $data['position']);
+		$description = $data['description'];
+		
+		$insert = sprintf("INSERT INTO bug (description, lt, ln) VALUES ('%s', %s, %s) Returning id", pg_escape_string($description), $pos[1], $pos[0]);
+		$this->fileLog("addBug:".$insert);
+		
 		$result = pg_query($insert);
 		
-		$id = pg_getlastoid($result);
+		$id = pg_fetch_array($result);
 		
-		echo json_encode(array('id' => $id));
+		echo json_encode(array('id' => $id[0]));
+	}
+	
+	public function updateBugImage($bugId){
+		$data =  file_get_contents("php://input");
+		if(!data){
+			$data = $HTTP_RAW_POST_DATA;
+		}
+		$this->fileLog("updateBugImage:".$data);
+		
+		$update = sprintf("update bug set image=%s", pg_escape_bytea($data));
+		$result = pg_query($update);
+		
+		if($result === false){
+			echo json_encode(array('error' => pg_last_error()));
+		}
+	}
+	
+	public function getBugsInEnvironment(){
+		$ln = $GET['ln'];
+		$ln = $GET['lt'];
+		$ln = $GET['radius'];
+		
+		
 	}
 	
 	private function formatBugData($bugData){
@@ -92,6 +122,13 @@ class RealBugAPI{
 			'image' => $imageUrl,
 			'position' => $pos
 		);
+	}
+	
+	private function fileLog($string){
+		
+		$handler = fopen(__DIR__."/log/log.txt", "a+");
+		fwrite($handler, $string."\n");
+		fclose($handler);
 	}
 	
 }
