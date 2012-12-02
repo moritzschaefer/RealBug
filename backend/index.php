@@ -22,9 +22,14 @@ $app->post('/RealBug', function(){
 	});
 	
 	
+$app->get('/RealBug/:id/img', function($id){
+		$api = new RealBugAPI();
+		$api->getImage($id);
+	});
+	
 $app->put('/RealBug/:id/img', function($id){
 		$api = new RealBugAPI();
-		$api->updateBugImage($id);
+		$api->updateBugImage($id, \Slim\Slim::getInstance()->request()->getBody());
 	});
 		
 $app->run();
