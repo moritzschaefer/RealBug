@@ -1,5 +1,5 @@
 
-public class RealBugNetwork {
+public class RealBugUtils {
             
     public static final String REAL_BUG_JSON_KEY_POSITION = "position";
     public static final String REAL_BUG_JSON_KEY_DESCRIPTION = "description";

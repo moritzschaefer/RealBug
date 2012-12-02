@@ -32,10 +32,10 @@ Response like this:
 
 GET 
 /RealBug
-JSON-Format: [{id:int, description:string, image:string, lnlt:string}, ..., ... ] 
+JSON-Format: [{id:int, description:string, image:string, position:string}, ..., ... ] 
 
 note: image:string is an url to the image RESTfull-call (see 4.)
-note2: lnlt is formated as lt,ln examples: "1.123123,5.2123123"
+note2: position is formated as lt,ln examples: "1.123123,5.2123123"
 
 3. Liste aller Realbugs in Radius r um Position ll,lt
 GET
@@ -53,10 +53,10 @@ Format: image/jpeg
 (5. Gib einen Realbug zurück)
 GET 
 /RealBug/ID
-JSON-Format: {id:int, description:string, image:string, lnlt:string}
+JSON-Format: {id:int, description:string, image:string, position:string}
 
 note: image:string is an url to the image RESTfull-call (see 4.)
-note2: lnlt is formated as ln,lt examples: "1.123123,5.2123123"
+note2: position is formated as ln,lt examples: "1.123123,5.2123123"
 
 6. Update Image
 PUT
