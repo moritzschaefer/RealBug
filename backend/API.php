@@ -74,8 +74,8 @@ class RealBugAPI{
 	public function addBug(){
 		$this->fileLog(file_get_contents("php://input"));
 		$data = json_decode(file_get_contents("php://input"));
-		$pos = explode(',', $data['position']);
-		$description = $data['description'];
+		$pos = explode(',', $data.position);
+		$description = $data.description;
 		
 		$insert = pg_escape_string(sprintf("INSERT INTO bug(description, lt, ln) VALUES (%s, %d, %d)", $description, $pos[1], $pos[0]));
 		$result = pg_query($insert);
@@ -87,6 +87,7 @@ class RealBugAPI{
 	
 	public function updateBugImage($bugId){
 		$data =  file_get_contents("php://input");
+		$this->fileLog($data);
 		
 		$update = pg_escape_bytea(sprintf("update bug set image=%s", $data));
 		$result = pg_query($update);
@@ -119,7 +120,7 @@ class RealBugAPI{
 	private function fileLog($string){
 		
 		$handler = fopen(__DIR__."/log/log.txt", "a+");
-		fwrite($handler, $string);
+		fwrite($handler, $string."\n");
 		fclose($handler);
 	}
 	
