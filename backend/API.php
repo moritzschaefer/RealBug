@@ -35,6 +35,7 @@ class RealBugAPI{
 	}
 	
 	public function getRealBug($id){
+		$this->fileLog("retrieve id ".$id);
 		header('Content-type: application/json');
 		
 		try{
@@ -71,6 +72,7 @@ class RealBugAPI{
 	}
 	
 	public function addBug(){
+		$this->fileLog(file_get_contents("php://input"));
 		$data = json_decode(file_get_contents("php://input"));
 		$pos = explode(',', $data['position']);
 		$description = $data['description'];
@@ -94,6 +96,14 @@ class RealBugAPI{
 		}
 	}
 	
+	public function getBugsInEnvironment(){
+		$ln = $GET['ln'];
+		$ln = $GET['lt'];
+		$ln = $GET['radius'];
+		
+		
+	}
+	
 	private function formatBugData($bugData){
 		$imageUrl = $this->apiAdress . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "img";
 		$pos = $bugData['ln'] . "," . $bugData['lt'];
@@ -104,6 +114,13 @@ class RealBugAPI{
 			'image' => $imageUrl,
 			'position' => $pos
 		);
+	}
+	
+	private function fileLog($string){
+		
+		$handler = fopen(__DIR__."/log/log.txt", "a+");
+		fwrite($handler, $string);
+		fclose($handler);
 	}
 	
 }

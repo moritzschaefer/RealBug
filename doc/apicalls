@@ -39,7 +39,8 @@ note2: position is formated as lt,ln examples: "1.123123,5.2123123"
 
 3. Liste aller Realbugs in Radius r um Position ll,lt
 GET
-/RealBug/ll,lt,r  Beispiel: http://url.do/RealBug/0.1231244,23.1229394,500.0
+Beispiel:
+/RealBug/ll,lt,r  Beispiel: http://url.do/RealBug?ln=0.1231244&lt=23.1229394&r=500.0
 NOTE: all Values are doubles/floats!!
 Returns list as in 2.
 
