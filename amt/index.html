@@ -1,0 +1,36 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>RealBug Listing</title>
+    </head>
+    <body>
+
+        <h2 class="headLine">
+            All Real-Bugs
+        </h2>
+        <div id="content"> 
+            
+        </div>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+        <script type="text/javascript">
+            var url = "http://obscure-fjord-9100.herokuapp.com/index.php/RealBug";
+            $(document).ready(function() {
+                    asdff();
+                        });
+            function asdff() {
+                $.get(url, function(data,sta) {
+                    $('#content').html(data);
+                        });
+            }
+
+    
+        </script>
+
+
+
+    </body>
+
+</html>
+
+
+
