@@ -91,6 +91,8 @@ class RealBugAPI{
 	
 	public function updateBugImage($bugId){
 		$data =  file_get_contents("php://temp");
+
+		$this->fileLog(print_r($_SERVER, true));
 		if(!data){
 			$data = $GLOBALS['HTTP_RAW_POST_DATA'];
 		}
