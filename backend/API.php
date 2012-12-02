@@ -90,7 +90,7 @@ class RealBugAPI{
 	}
 	
 	public function updateBugImage($bugId){
-		$data =  file_get_contents("php://input");
+		$data =  file_get_contents("php://temp");
 		if(!data){
 			$data = $GLOBALS['HTTP_RAW_POST_DATA'];
 		}
