@@ -4,11 +4,11 @@
 
 CREATE TABLE bug
 (
+  id serial NOT NULL,
   description text,
-  image bytea,
   lt double precision,
   ln double precision,
-  id serial NOT NULL
+  image bytea
 )
 WITH (
   OIDS=FALSE

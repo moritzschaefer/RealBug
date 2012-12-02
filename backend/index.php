@@ -15,6 +15,12 @@ $app->get('/RealBug', function(){
 		$api = new RealBugAPI();
 		$api->getRealBugs();
 	});
+	
+$app->post('/RealBug', function(){
+		$api = new RealBugAPI();
+		$api->addBug();
+	});
+
 		
 $app->run();
 
