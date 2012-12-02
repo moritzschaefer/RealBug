@@ -71,8 +71,9 @@ class RealBugAPI{
 	}
 	
 	public function addBug(){
-		$pos = explode(',', $_POST['position']);
-		$description = $_POST['description'];
+		$data = json_decode($_POST);
+		$pos = explode(',', $data['position']);
+		$description = $data['description'];
 		
 		$insert = pg_escape_string(sprintf("INSERT INTO bug(description, lt, ln) VALUES (%s, %d, %d)", $description, $pos[1], $pos[0]));
 		$result = pg_query($insert);
@@ -80,6 +81,17 @@ class RealBugAPI{
 		$id = pg_getlastoid($result);
 		
 		echo json_encode(array('id' => $id));
+	}
+	
+	public function updateBugImage($bugId){
+		$data =  file_get_contents("php://input");
+		
+		$update = pg_escape_bytea(sprintf("update bug set image=%s", $data));
+		$result = pg_query($update);
+		
+		if($result === false){
+			echo json_encode(array('error' => pg_last_error()));
+		}
 	}
 	
 	private function formatBugData($bugData){
