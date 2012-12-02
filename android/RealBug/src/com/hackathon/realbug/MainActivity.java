@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,18 +19,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.android.realbug.R;
 import com.hackathon.realbug.factory.AlbumStorageDirFactory;
 import com.hackathon.realbug.factory.BaseAlbumDirFactory;
 import com.hackathon.realbug.factory.FroyoAlbumDirFactory;
 
-public class MainActivity extends SherlockActivity {
+public class MainActivity extends Activity {
 
 	private static final int ACTION_TAKE_PHOTO = 1;
 	private static final int ACTION_TAKE_PHOTO_S = 2;
