@@ -73,10 +73,11 @@ class RealBugAPI{
 	
 	public function addBug(){
 		$this->fileLog("addBug:".file_get_contents("php://input"));
-		$data = json_decode(file_get_contents("php://input"));
+		$data = json_decode(file_get_contents("php://input"), true);
 		$this->fileLog("addBug:".var_export($data, true));
-		$pos = explode(',', $data.position);
-		$description = $data.description;
+		
+		$pos = explode(',', $data['position']);
+		$description = $data['description'];
 		
 		$insert = pg_escape_string(sprintf("INSERT INTO bug(description, lt, ln) VALUES ('%s', %d, %d)", $description, $pos[1], $pos[0]));
 		$this->fileLog("addBug:".$insert);
