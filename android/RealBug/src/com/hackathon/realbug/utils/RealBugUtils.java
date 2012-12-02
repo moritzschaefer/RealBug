@@ -359,7 +359,8 @@ public class RealBugUtils {
         }
         byte[] imageBuffer;
         try {
-        	imageBuffer = EntityUtils.toByteArray(response.getEntity());
+        	imageBuffer = new byte[(int)response.getEntity().getContentLength()];
+        	response.getEntity().getContent().read(imageBuffer);
         } catch(IOException e) {
         	e.printStackTrace();
         	return new byte[0];
