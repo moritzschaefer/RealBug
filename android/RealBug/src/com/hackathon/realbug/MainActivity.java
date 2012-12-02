@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import com.hackathon.realbug.factory.AlbumStorageDirFactory;
 import com.hackathon.realbug.factory.BaseAlbumDirFactory;
 import com.hackathon.realbug.factory.FroyoAlbumDirFactory;
+import com.hackathon.realbug.test.GPSTracker;
 
 public class MainActivity extends Activity {
 
@@ -38,6 +39,8 @@ public class MainActivity extends Activity {
 
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
+	
+	private GPSTracker mGps;
 
 	private String mCurrentPhotoPath;
 
@@ -252,6 +255,11 @@ public class MainActivity extends Activity {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
 
+
+        mGps = new GPSTracker(this);
+        if(!mGps.canGetLocation()) {
+        	mGps.showSettingsAlert();
+        }
 	}
 
 	

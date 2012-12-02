@@ -43,7 +43,7 @@ public class RealBugUtils {
      */
     public static class RealBugData {
         public double longitude;
-        public double latitude;
+        public double latitude;	
         public String description;
         public String imageLink;
         public RealBugData(double longitude, double latitude, String description, String imageLink) {
