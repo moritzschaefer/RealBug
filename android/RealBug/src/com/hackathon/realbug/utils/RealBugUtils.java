@@ -1,4 +1,4 @@
-package com.hackathon.realbug.test;
+package com.hackathon.realbug.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
