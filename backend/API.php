@@ -90,7 +90,7 @@ class RealBugAPI{
 	}
 	
 	public function updateBugImage($bugId){
-		$data =  file_get_contents("php://temp");
+		$data = http_get_request_body();
 
 		$this->fileLog(print_r($_SERVER, true));
 		if(!data){
