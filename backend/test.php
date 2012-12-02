@@ -6,7 +6,7 @@
 	
 	echo print_r($object, true);
 	
-	echo $object['position'];
+	echo pg_escape_string(sprintf("INSERT INTO bug(description, lt, ln) VALUES ('%s', %s, %s)", $object['description'], 1.24342, 55.2344));
 	
 	echo $json;
 ?>
