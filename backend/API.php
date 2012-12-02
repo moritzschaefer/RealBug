@@ -79,7 +79,7 @@ class RealBugAPI{
 		$pos = explode(',', $data['position']);
 		$description = $data['description'];
 		
-		$insert = pg_escape_string(sprintf('INSERT INTO bug(description, lt, ln) VALUES ("%s", %s, %s)', $description, $pos[1], $pos[0]));
+		$insert = pg_escape_string(sprintf("INSERT INTO bug (description, lt, ln) VALUES ('%s', %s, %s)", $description, $pos[1], $pos[0]));
 		$this->fileLog("addBug:".$insert);
 		
 		$result = pg_query($insert);
