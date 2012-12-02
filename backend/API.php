@@ -36,7 +36,7 @@ class RealBugAPI{
 	
 	public function getRealBug($id){
 		$this->fileLog("retrieve id ".$id);
-		header('Content-type: application/json');
+		\Slim\Slim::getInstance()->response()->header('Content-Type', 'application/json');
 		
 		try{
 			$select = pg_escape_string(sprintf("Select * from bug where id=%d", $id));
@@ -54,7 +54,7 @@ class RealBugAPI{
 	}
 	
 	public function getRealBugs(){
-		header('Content-type: application/json');
+		\Slim\Slim::getInstance()->response()->header('Content-Type', 'application/json');
 		
 		try{
 			$select = pg_escape_string("Select * from bug");
@@ -72,6 +72,8 @@ class RealBugAPI{
 	}
 	
 	public function addBug(){
+		\Slim\Slim::getInstance()->response()->header('Content-Type', 'application/json');
+		
 		$this->fileLog("addBug:".file_get_contents("php://input"));
 		$data = json_decode(file_get_contents("php://input"), true);
 		$this->fileLog("addBug:".var_export($data, true));
@@ -90,6 +92,7 @@ class RealBugAPI{
 	}
 	
 	public function updateBugImage($bugId, $data){
+		\Slim\Slim::getInstance()->response()->header('Content-Type', 'application/json');
 		
 		$update = sprintf("update bug set image='%s' where id=%d", pg_escape_bytea($data), $bugId);
 		$result = pg_query($update);
@@ -117,6 +120,26 @@ class RealBugAPI{
 			'image' => $imageUrl,
 			'position' => $pos
 		);
+	}
+	
+	public function getImage($id){
+		\Slim\Slim::getInstance()->response()->header('Content-Type', 'image/jpeg');
+		
+		try{
+			$select = pg_escape_string(sprintf("Select * from bug where id=%d", $id));
+			$result = pg_query($this->con, $select);
+			
+			$bugData = pg_fetch_assoc($result);
+			if(!$bugData) throw new Exception(sprintf("No Bug with ID %d", $id));
+			
+			\Slim\Slim::getInstance()->response()->header('Content-Length', strlen($bugData['image']));
+
+			echo $bugData['image'];
+			
+		}catch(Exception $e){
+			echo json_encode(array('error' => utf8_encode($e->getMessage())));
+		}
+		
 	}
 	
 	private function fileLog($string){
