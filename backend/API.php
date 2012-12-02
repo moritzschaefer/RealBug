@@ -10,10 +10,12 @@ class RealBugAPI{
 	private	$user = "rmtcunwfewenbn";
 	private	$pw = "utQ0pLnQyZTJopK1UX4QSjCMwf";
 	
+	private $apiAdress = "";
 	
 	public function __construct(){
 		
 		try{
+			$this->apiAdress = $_SERVER["SERVER_NAME"] . DIRECTORY_SEPARATOR . "index.php";
 			$this->connectToDatabase();
 		}catch(Exception $e){
 			echo json_encode(array('error' => $e->getMessage()));
@@ -42,15 +44,7 @@ class RealBugAPI{
 			$bugData = pg_fetch_assoc($result);
 			if(!$bugData) throw new Exception(sprintf("No Bug with ID %d", $id));
 			
-			$imageUrl = $_SERVER["REQUEST_URI"] . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "IMG";
-			$pos = $bugData['ln'] . "," . $bugData['lt'];
-			
-			$return = array(
-				'id' => $bugData['id'],
-				'description' => $bugData['description'],
-				'image' => $imageUrl,
-				'lnlt' => $pos
-			);
+			$return = $this->formatBugData($bugData);
 			
 			echo json_encode($return);
 		}catch(Exception $e){
@@ -67,15 +61,7 @@ class RealBugAPI{
 			
 			$returns = array();
 			while($bugData = pg_fetch_assoc($result)){
-				$imageUrl = $_SERVER["REQUEST_URI"] . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "IMG";
-				$pos = $bugData['ln'] . "," . $bugData['lt'];
-				
-				$returns[] = array(
-					'id' => $bugData['id'],
-					'description' => $bugData['description'],
-					'image' => $imageUrl,
-					'lnlt' => $pos
-				);
+				$returns[] = $this->formatBugData($bugData);
 			}
 			
 			echo json_encode($returns);
@@ -88,7 +74,24 @@ class RealBugAPI{
 		$pos = explode(',', $_POST['position']);
 		$description = $_POST['description'];
 		
+		$insert = pg_escape_string(sprintf("INSERT INTO bug(description, lt, ln) VALUES (%s, %d, %d)", $description, $pos[1], $pos[0]));
+		$result = pg_query($insert);
 		
+		$id = pg_getlastoid($result);
+		
+		echo json_encode(array('id' => $id));
+	}
+	
+	private function formatBugData($bugData){
+		$imageUrl = $this->apiAdress . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "img";
+		$pos = $bugData['ln'] . "," . $bugData['lt'];
+		
+		return array(
+			'id' => $bugData['id'],
+			'description' => $bugData['description'],
+			'image' => $imageUrl,
+			'position' => $pos
+		);
 	}
 	
 }
