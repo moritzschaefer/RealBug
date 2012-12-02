@@ -79,14 +79,14 @@ class RealBugAPI{
 		$pos = explode(',', $data['position']);
 		$description = $data['description'];
 		
-		$insert = sprintf("INSERT INTO bug (description, lt, ln) VALUES ('%s', %s, %s)", pg_escape_string($description), $pos[1], $pos[0]);
+		$insert = sprintf("INSERT INTO bug (description, lt, ln) VALUES ('%s', %s, %s) Returning id", pg_escape_string($description), $pos[1], $pos[0]);
 		$this->fileLog("addBug:".$insert);
 		
 		$result = pg_query($insert);
 		
-		$id = pg_getlastoid($result);
+		$id = pg_fetch_array($result);
 		
-		echo json_encode(array('id' => $id));
+		echo json_encode(array('id' => $id[0]));
 	}
 	
 	public function updateBugImage($bugId){
