@@ -9,5 +9,6 @@
 	<string name="btn_send">Send</string>
 	<string name="btn_cancel">Cancel</string>
 	<string name="capture_description">Here is the Thumb for the BugCapture</string>
+	<string name="cannot">Cannot</string>
 	
 </resources>

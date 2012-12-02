@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:visibility="visible" />
 
-    <TextView
+    <EditText
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -34,7 +34,7 @@
             android:id="@+id/btn_cancel"
             android:text="@string/btn_cancel"
             android:layout_height="wrap_content"
-            android:layout_width="dp"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:onClick="btncCancel"/>
     </LinearLayout>

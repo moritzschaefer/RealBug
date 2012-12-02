@@ -1,12 +1,12 @@
 package com.hackathon.realbug;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,18 +19,22 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.android.realbug.R;
 import com.hackathon.realbug.factory.AlbumStorageDirFactory;
 import com.hackathon.realbug.factory.BaseAlbumDirFactory;
 import com.hackathon.realbug.factory.FroyoAlbumDirFactory;
 import com.hackathon.realbug.utils.GPSTracker;
 
-public class MainActivity extends Activity {
+public class MainActivity extends SherlockActivity {
 
+	
+	private static final String LOG_TAG = "MainActivity";
 	private static final int ACTION_TAKE_PHOTO = 1;
 	private static final int ACTION_TAKE_PHOTO_S = 2;
 
@@ -58,7 +62,7 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_camera:
-			takeCapture(ACTION_TAKE_PHOTO);
+			takeCapture(ACTION_TAKE_PHOTO_S);
 			break;
 
 		default:
@@ -90,7 +94,8 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-
+		
+		startActivityForResult(takePictureIntent, actionCode);
 	}
 
 	private File setUpPhotoFile() throws IOException {
@@ -142,26 +147,6 @@ public class MainActivity extends Activity {
 		return getString(R.string.album_name);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch (requestCode) {
-		case ACTION_TAKE_PHOTO: {
-			if (resultCode == RESULT_OK) {
-				handleBigCameraPhoto();
-			}
-			break;
-		} // ACTION_TAKE_PHOTO_B
-
-		case ACTION_TAKE_PHOTO_S: {
-			if (resultCode == RESULT_OK) {
-				handleSmallCameraPhoto(data);
-			}
-			break;
-		} // ACTION_TAKE_PHOTO_S
-
-		} // switch
-	}
-
 	private void handleBigCameraPhoto() {
 
 		if (mCurrentPhotoPath != null) {
@@ -210,8 +195,7 @@ public class MainActivity extends Activity {
 	private void handleSmallCameraPhoto(Intent intent) {
 		Bundle extras = intent.getExtras();
 		mImageBitmap = (Bitmap) extras.get("data");
-		mImageView.setImageBitmap(mImageBitmap);
-		mImageView.setVisibility(View.VISIBLE);
+		
 	}
 
 	private void galleryAddPic() {
@@ -221,6 +205,30 @@ public class MainActivity extends Activity {
 		Uri contentUri = Uri.fromFile(f);
 		mediaScanIntent.setData(contentUri);
 		this.sendBroadcast(mediaScanIntent);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case ACTION_TAKE_PHOTO: 
+			if (resultCode == RESULT_OK) {
+				handleBigCameraPhoto();
+			}
+			break;
+			// ACTION_TAKE_PHOTO
+	
+		case ACTION_TAKE_PHOTO_S: 
+			if (resultCode == RESULT_OK) {
+				handleSmallCameraPhoto(data);
+			}
+			break;
+			// ACTION_TAKE_PHOTO_S
+	
+		} // switch
+		
+		Intent intent = new Intent(this, CameraActivity.class);
+		intent.putExtras(data.getExtras());
+		startActivity(intent);
 	}
 
 	// Some lifecycle callbacks so that the image can survive orientation change
@@ -243,6 +251,7 @@ public class MainActivity extends Activity {
 						: ImageView.INVISIBLE);
 	}
 	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -261,7 +270,7 @@ public class MainActivity extends Activity {
         }
 	}
 
-	
+
 	/**
 	 * Indicates whether the specified action can be used as an intent. This
 	 * method queries the package manager for installed packages that can
@@ -275,7 +284,6 @@ public class MainActivity extends Activity {
 	 * @return True if an Intent with the specified action can be sent and
 	 *         responded to, false otherwise.
 	 */
-	
 	public static boolean isIntentAvailable(Context context, String action) {
 		final PackageManager packageManager = context.getPackageManager();
 		final Intent intent = new Intent(action);
@@ -283,5 +291,26 @@ public class MainActivity extends Activity {
 			packageManager.queryIntentActivities(intent,
 					PackageManager.MATCH_DEFAULT_ONLY);
 		return list.size() > 0;
+	}
+	
+
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		mImageBitmap = null;
+		
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+			mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
+		} else {
+			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
+
+	}
+	
+	
+
 }
