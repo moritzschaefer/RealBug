@@ -91,10 +91,7 @@ class RealBugAPI{
 	
 	public function updateBugImage($bugId, $data){
 		
-		$this->fileLog(print_r($data));
-		$this->fileLog("updateBugImage:".$data[64]);
-		
-		$update = sprintf("update bug set image='%s'", pg_escape_bytea($data));
+		$update = sprintf("update bug set image='%s' where id=%d", pg_escape_bytea($data), $id);
 		$result = pg_query($update);
 		
 		if($result === false){
