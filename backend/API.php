@@ -90,12 +90,9 @@ class RealBugAPI{
 	}
 	
 	public function updateBugImage($bugId){
-		$data = http_get_request_body();
+		$parse_str(file_get_contents("php://input"),$data);
 
-		$this->fileLog(print_r($_SERVER, true));
-		if(!data){
-			$data = $GLOBALS['HTTP_RAW_POST_DATA'];
-		}
+		$this->fileLog(print_r($data));
 		$this->fileLog("updateBugImage:".$data[64]);
 		
 		$update = sprintf("update bug set image='%s'", pg_escape_bytea($data));
