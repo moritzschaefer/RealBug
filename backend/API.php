@@ -81,7 +81,7 @@ class RealBugAPI{
 	}
 	
 	private function formatBugData($bugData){
-		$imageUrl = $_SERVER["SERVER_ADDR"] . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "IMG";
+		$imageUrl = $_SERVER["SERVER_NAME"] . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "IMG";
 		$pos = $bugData['ln'] . "," . $bugData['lt'];
 		
 		return array(
