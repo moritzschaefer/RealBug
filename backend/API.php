@@ -91,7 +91,7 @@ class RealBugAPI{
 	
 	public function updateBugImage($bugId){
 		
-
+		$this->fileLog(print_r($_FILES, true));
 		$this->fileLog(print_r($_SERVER, true));
 		
 		$data = file_get_contents("php://input");
