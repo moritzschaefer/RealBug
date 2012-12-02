@@ -126,6 +126,8 @@ class RealBugAPI{
 		\Slim\Slim::getInstance()->response()->header('Content-Type', 'image/jpeg');
 		
 		try{
+			
+			$this->fileLog($_SERVER['CONTENT_LENGTH']);
 			$select = pg_escape_string(sprintf("Select * from bug where id=%d", $id));
 			$result = pg_query($this->con, $select);
 			
@@ -134,7 +136,7 @@ class RealBugAPI{
 			
 			\Slim\Slim::getInstance()->response()->header('Content-Length', strlen($bugData['image']));
 
-			echo $bugData['image'];
+			echo pg_unescape_bytea($bugData['image']);
 			
 		}catch(Exception $e){
 			echo json_encode(array('error' => utf8_encode($e->getMessage())));
