@@ -24,7 +24,7 @@ $app->post('/RealBug', function(){
 	
 $app->put('/RealBug/:id/img', function($id){
 		$api = new RealBugAPI();
-		$api->updateBugImage($id);
+		$api->updateBugImage($id, $app->request()->getBody());
 	});
 		
 $app->run();

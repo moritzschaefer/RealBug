@@ -89,12 +89,8 @@ class RealBugAPI{
 		echo json_encode(array('id' => $id[0]));
 	}
 	
-	public function updateBugImage($bugId){
+	public function updateBugImage($bugId, $data){
 		
-		$this->fileLog("blub: ".print_r($GLOBALS, true));
-		$this->fileLog(print_r($_SERVER, true));
-		
-		$data = file_get_contents("php://input");
 		$this->fileLog(print_r($data));
 		$this->fileLog("updateBugImage:".$data[64]);
 		
