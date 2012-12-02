@@ -27,7 +27,7 @@ import android.widget.ImageView;
 import com.hackathon.realbug.factory.AlbumStorageDirFactory;
 import com.hackathon.realbug.factory.BaseAlbumDirFactory;
 import com.hackathon.realbug.factory.FroyoAlbumDirFactory;
-import com.hackathon.realbug.test.GPSTracker;
+import com.hackathon.realbug.utils.GPSTracker;
 
 public class MainActivity extends Activity {
 
@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
 

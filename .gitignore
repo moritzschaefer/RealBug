@@ -1,2 +1,4 @@
 android/RealBug/bin
 android/RealBug/gen
+android/RealBug/project.properties
+android/RealBug/proguard-project.txt
