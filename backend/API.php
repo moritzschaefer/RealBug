@@ -10,10 +10,12 @@ class RealBugAPI{
 	private	$user = "rmtcunwfewenbn";
 	private	$pw = "utQ0pLnQyZTJopK1UX4QSjCMwf";
 	
+	private $apiAdress = "";
 	
 	public function __construct(){
 		
 		try{
+			$this->apiAdress = $_SERVER["SERVER_NAME"] . DIRECTORY_SEPARATOR . "index.php";
 			$this->connectToDatabase();
 		}catch(Exception $e){
 			echo json_encode(array('error' => $e->getMessage()));
@@ -81,7 +83,7 @@ class RealBugAPI{
 	}
 	
 	private function formatBugData($bugData){
-		$imageUrl = $_SERVER["SERVER_NAME"] . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "IMG";
+		$imageUrl = $this->apiAdress . DIRECTORY_SEPARATOR . "RealBug" . DIRECTORY_SEPARATOR . $bugData['id'] . DIRECTORY_SEPARATOR . "img";
 		$pos = $bugData['ln'] . "," . $bugData['lt'];
 		
 		return array(
