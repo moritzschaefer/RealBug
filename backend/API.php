@@ -90,7 +90,7 @@ class RealBugAPI{
 	}
 	
 	public function updateBugImage($bugId){
-		$parse_str(file_get_contents("php://input"),$data);
+		parse_str(file_get_contents("php://input"),$data);
 
 		$this->fileLog(print_r($data));
 		$this->fileLog("updateBugImage:".$data[64]);
